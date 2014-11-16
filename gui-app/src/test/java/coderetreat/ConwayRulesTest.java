@@ -31,31 +31,6 @@ public class ConwayRulesTest {
 		assertThat(
 				rules.getAllLocationsThatCanBeAffected(liveCells), 
 				containsInAnyOrder(
-						new Point(cell.x, cell.y+1),
-//						new Point(cell.x, cell.y),
-						new Point(cell.x, cell.y-1),
-						new Point(cell.x+1, cell.y+1),
-						new Point(cell.x+1, cell.y),
-						new Point(cell.x+1, cell.y-1),
-						new Point(cell.x-1, cell.y+1),
-						new Point(cell.x-1, cell.y),
-						new Point(cell.x-1, cell.y-1))
-						);
-		
-		assertThat(
-				rules.getAllLocationsThatCanBeAffected(liveCells),
-				not(hasItem(cell)));
-	}
-	
-	/*
-	 * 
-	 */
-	@Test
-	public void returnsEightDeadNeighbours_givenACell_withNoNeighbours() throws Exception {
-		Set<Point> liveCells = Sets.newHashSet(cell);
-		assertThat(
-				rules.getDeadNeighbours(liveCells, cell), 
-				containsInAnyOrder(
 						createRelativePoint(cell, 0, 1),
 						createRelativePoint(cell, 0, -1),
 						createRelativePoint(cell, 1, 1),
@@ -66,36 +41,42 @@ public class ConwayRulesTest {
 						createRelativePoint(cell, -1, -1)
 						));
 		
+		assertThat(
+				rules.getAllLocationsThatCanBeAffected(liveCells),
+				not(hasItem(cell)));
 	}
 	
 	@Test
 	public void countsTwoNeighbours_whenTwoNeighboursExistHorizontally() throws Exception {
-		Set<Point> liveCells = Sets.newHashSet(cell, 
-				new Point(cell.x-1,cell.y), 
-				new Point(cell.x+1,cell.y));
-		
+		Set<Point> liveCells = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, -1, 0),
+				createRelativePoint(cell, 1, 0)
+				);
 		assertThat(rules.countNeighbours(liveCells, cell), is(2));
 		
 	}
 	
 	@Test
 	public void countsTwoNeighbours_whenTwoNeighboursExistVertically() throws Exception {
-		Set<Point> liveCells = Sets.newHashSet(cell, 
-				new Point(cell.x,cell.y-1), 
-				new Point(cell.x,cell.y+1));
-		
+		Set<Point> liveCells = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, 0, -1),
+				createRelativePoint(cell, 0, 1)
+				);
 		assertThat(rules.countNeighbours(liveCells, cell), is(2));
 		
 	}
 	
 	@Test
 	public void countsFourNeighbours_whenFourNeighboursExistDiagonally() throws Exception {
-		Set<Point> liveCells = Sets.newHashSet(cell, 
-				new Point(cell.x-1,cell.y-1), 
-				new Point(cell.x+1,cell.y+1),
-				new Point(cell.x+1,cell.y-1),
-				new Point(cell.x-1,cell.y+1));
-		
+		Set<Point> liveCells = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, -1, -1),
+				createRelativePoint(cell, 1, 1),
+				createRelativePoint(cell, 1, -1),
+				createRelativePoint(cell, -1, 1)
+				);
 		assertThat(rules.countNeighbours(liveCells, cell), is(4));
 	}
 	
@@ -107,9 +88,11 @@ public class ConwayRulesTest {
 	
 	@Test
 	public void cellStaysAlive_whenHasTwoNeighbours() throws Exception {
-		Set<Point> world = Sets.newHashSet(cell, 
-				new Point(cell.x,cell.y-1),
-				new Point(cell.x,cell.y+1));
+		Set<Point> world = Sets.newHashSet(
+				cell, 
+				createRelativePoint(cell, 0, -1),
+				createRelativePoint(cell, 0, 1)
+				);
 		assertThat(rules.tick(world), hasItem(cell));
 	}
 	
@@ -119,8 +102,8 @@ public class ConwayRulesTest {
 				cell, 
 				createRelativePoint(cell, -1, 0),
 				createRelativePoint(cell, 0, -1),
-				createRelativePoint(cell, 0, 1));
-
+				createRelativePoint(cell, 0, 1)
+				);
 		assertThat(rules.tick(world), hasItem(cell));
 	}
 	
