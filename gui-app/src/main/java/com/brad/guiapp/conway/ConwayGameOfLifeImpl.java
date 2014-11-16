@@ -4,8 +4,11 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
+import coderetreat.ConwayRules;
+
 public class ConwayGameOfLifeImpl implements ConwayGameOfLife {
 
+	private final ConwayRules rules = new ConwayRules();
 	private int dimension;
 	private Set<Point> world = new HashSet<>();
 	
@@ -20,7 +23,7 @@ public class ConwayGameOfLifeImpl implements ConwayGameOfLife {
 
 	@Override
 	public java.util.Set<Point> incrementAndGetWorld() {
-		return world;
+		return rules.tick(world);
 	}
 
 }

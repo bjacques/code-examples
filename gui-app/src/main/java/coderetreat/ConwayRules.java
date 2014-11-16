@@ -1,4 +1,4 @@
-package com.brad.guiapp.conway;
+package coderetreat;
 
 import java.awt.Point;
 import java.util.HashSet;
@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-public class Rules {
+public class ConwayRules {
 
 	public Set<Point> getAllCellsToCheck(Set<Point> liveCells) {
 		Set<Point> points = new HashSet<Point>();

@@ -20,6 +20,12 @@ public class Main {
 		
 		Set<Point> seedWorld = new HashSet<>();
 		seedWorld.add(new Point(10,20));
+		seedWorld.add(new Point(10,21));
+		seedWorld.add(new Point(11,20));
+		
+		seedWorld.add(new Point(20,21));
+		seedWorld.add(new Point(20,22));
+		seedWorld.add(new Point(20,23));
 		
     	ConwayGameOfLifeImpl game = new ConwayGameOfLifeImpl(worldDimension, seedWorld);
     	
