@@ -1,16 +1,17 @@
 package com.brad.guiapp.conway;
 
 import java.awt.Point;
-import java.util.HashSet;
 import java.util.Set;
 
 import coderetreat.ConwayRules;
+
+import com.google.common.collect.Sets;
 
 public class ConwayGameOfLifeImpl implements ConwayGameOfLife {
 
 	private final ConwayRules rules = new ConwayRules();
 	private int dimension;
-	private Set<Point> world = new HashSet<>();
+	private Set<Point> world = Sets.newHashSet();
 	
 	public ConwayGameOfLifeImpl(int dimension, Set<Point> seed) {
 		this.dimension = dimension;
@@ -21,9 +22,10 @@ public class ConwayGameOfLifeImpl implements ConwayGameOfLife {
 		return dimension;
 	}
 
-	@Override
-	public java.util.Set<Point> incrementAndGetWorld() {
-		return rules.tick(world);
+	public Set<Point> incrementAndGetWorld() {
+		Set<Point> nextWorld = rules.tick(world);
+		world = nextWorld;
+		return nextWorld;
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.brad.guiapp.conway;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
@@ -75,9 +72,9 @@ public class LiveCellTest {
 	@Test
 	public void aLiveCell_livesOrDies_dependingOnTheNumberOfNeighbours() {
 		ConwayGameOfLifeImpl game = new ConwayGameOfLifeImpl(this.worldDimension, this.seedWorld);
-//		assertThat(
-//				game.incrementAndGetWorld().contains(cellUnderTest), 
-//				is(isAliveAfterIncrement));
+		assertThat(
+				game.incrementAndGetWorld().contains(cellUnderTest), 
+				is(isAliveAfterIncrement));
 	}
 
 }
