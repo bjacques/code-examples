@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 import java.awt.Point;
@@ -21,17 +22,17 @@ public class ConwayRulesTest {
 	 * 			x,y+1
 	 * 
 	 */
-	private Point cell = new Point(1,1);
+	private Point cell = new Point(5,5);
 	private ConwayRules rules = new ConwayRules();
 	
 	@Test
-	public void returnAllCellsToCheck_givenLiveCells() throws Exception {
+	public void returnsAllPossibleCellPositionsThatCanChange_whenWorldTicks_givenLiveCells() throws Exception {
 		Set<Point> liveCells = Sets.newHashSet(cell);
 		assertThat(
-				rules.getAllCellsToCheck(liveCells), 
+				rules.getAllLocationsThatCanBeAffected(liveCells), 
 				containsInAnyOrder(
 						new Point(cell.x, cell.y+1),
-						new Point(cell.x, cell.y),
+//						new Point(cell.x, cell.y),
 						new Point(cell.x, cell.y-1),
 						new Point(cell.x+1, cell.y+1),
 						new Point(cell.x+1, cell.y),
@@ -40,10 +41,35 @@ public class ConwayRulesTest {
 						new Point(cell.x-1, cell.y),
 						new Point(cell.x-1, cell.y-1))
 						);
+		
+		assertThat(
+				rules.getAllLocationsThatCanBeAffected(liveCells),
+				not(hasItem(cell)));
+	}
+	
+	/*
+	 * 
+	 */
+	@Test
+	public void returnsEightDeadNeighbours_givenACell_withNoNeighbours() throws Exception {
+		Set<Point> liveCells = Sets.newHashSet(cell);
+		assertThat(
+				rules.getDeadNeighbours(liveCells, cell), 
+				containsInAnyOrder(
+						createRelativePoint(cell, 0, 1),
+						createRelativePoint(cell, 0, -1),
+						createRelativePoint(cell, 1, 1),
+						createRelativePoint(cell, 1, 0),
+						createRelativePoint(cell, 1, -1),
+						createRelativePoint(cell, -1, 1),
+						createRelativePoint(cell, -1, 0),
+						createRelativePoint(cell, -1, -1)
+						));
+		
 	}
 	
 	@Test
-	public void returnsCountOf2WhenNumberOfLiveNeighboursHorizontallyIs2() throws Exception {
+	public void countsTwoNeighbours_whenTwoNeighboursExistHorizontally() throws Exception {
 		Set<Point> liveCells = Sets.newHashSet(cell, 
 				new Point(cell.x-1,cell.y), 
 				new Point(cell.x+1,cell.y));
@@ -53,7 +79,7 @@ public class ConwayRulesTest {
 	}
 	
 	@Test
-	public void returnsCountOf2WhenNumberOfLiveNeighboursVerticallyIs2() throws Exception {
+	public void countsTwoNeighbours_whenTwoNeighboursExistVertically() throws Exception {
 		Set<Point> liveCells = Sets.newHashSet(cell, 
 				new Point(cell.x,cell.y-1), 
 				new Point(cell.x,cell.y+1));
@@ -63,7 +89,7 @@ public class ConwayRulesTest {
 	}
 	
 	@Test
-	public void returnsCountOf4WhenNumberOfLiveNeighboursDiagonallyIs4() throws Exception {
+	public void countsFourNeighbours_whenFourNeighboursExistDiagonally() throws Exception {
 		Set<Point> liveCells = Sets.newHashSet(cell, 
 				new Point(cell.x-1,cell.y-1), 
 				new Point(cell.x+1,cell.y+1),
@@ -74,13 +100,13 @@ public class ConwayRulesTest {
 	}
 	
 	@Test
-	public void singleCellDies_whenNoNeighbours() throws Exception {
+	public void cellDies_whenNoNeighbours() throws Exception {
 		Set<Point> world = Sets.newHashSet(cell);
 		assertThat(rules.tick(world), empty());
 	}
 	
 	@Test
-	public void singleCellStayAlive_whenHasTwoNeighbours() throws Exception {
+	public void cellStaysAlive_whenHasTwoNeighbours() throws Exception {
 		Set<Point> world = Sets.newHashSet(cell, 
 				new Point(cell.x,cell.y-1),
 				new Point(cell.x,cell.y+1));
@@ -88,7 +114,7 @@ public class ConwayRulesTest {
 	}
 	
 	@Test
-	public void singleCellStayAlive_whenHasThreeNeighbours() throws Exception {
+	public void cellStaysAlive_whenHasThreeNeighbours() throws Exception {
 		Set<Point> world = Sets.newHashSet(
 				cell, 
 				createRelativePoint(cell, -1, 0),
@@ -98,4 +124,65 @@ public class ConwayRulesTest {
 		assertThat(rules.tick(world), hasItem(cell));
 	}
 	
+	@Test
+	public void cellDies_whenLessThan_twoNeighbours() throws Exception {
+		Set<Point> world = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, 1, 0)
+				);
+		assertThat(rules.tick(world), not(hasItem(cell)));
+	}
+	
+	@Test
+	public void cellDies_whenMoreThan_threeNeighbours() throws Exception {
+		Set<Point> world = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, 1, 0),
+				createRelativePoint(cell, 1, 1),
+				createRelativePoint(cell, -1, 0),
+				createRelativePoint(cell, 0, 1)
+				);
+		
+		assertThat(rules.tick(world), not(hasItem(cell)));
+	}
+	
+	@Test
+	public void cellIsBorn_whenExactly_threeNeighbours() throws Exception {
+		Set<Point> world = Sets.newHashSet(
+				createRelativePoint(cell, 1, 0),
+				createRelativePoint(cell, 1, 1),
+				createRelativePoint(cell, -1, 0)
+				);
+		
+		assertThat(rules.tick(world), hasItem(cell));
+	}
+	
+	@Test
+	public void noCellsDie_whenBlockOfFourCells() throws Exception {
+		Set<Point> world = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, 0, 1),
+				createRelativePoint(cell, 1, 0),
+				createRelativePoint(cell, 1, 1)
+				);
+		
+		assertThat(rules.tick(world).size(), is(4));
+	}
+	
+	@Test
+	public void threeHorizontalCells_becomeThreeVerticalCells() throws Exception {
+		Set<Point> world = Sets.newHashSet(
+				cell,
+				createRelativePoint(cell, 0, -1),
+				createRelativePoint(cell, 0, 1)
+				);
+		
+		assertThat(
+				rules.tick(world), 
+				containsInAnyOrder(
+						cell,
+						createRelativePoint(cell, -1, 0),
+						createRelativePoint(cell, 1, 0))
+				);
+	}
 }
