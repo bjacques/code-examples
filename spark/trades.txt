@@ -1,0 +1,5 @@
+alice,b,100,appl
+bob,s,50,goog
+charlie,b,200,vod
+derrick,b,330,appl
+eugene,s,100,appl
