@@ -1,16 +1,18 @@
-package sparky;
+package sparky.trade;
 
 import java.io.Serializable;
 
-public class Trade implements Serializable {
+import sparky.product.Product;
+
+public final class Trade implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String trader;
-	private String buySell;
-	private String amount;
-	private Ticker ticker;
-
+	public String trader;
+	public String buySell;
+	public String amount;
+	public Product product;
+	
 	public void setTrader(String string) {
 		this.trader = string;
 	}
@@ -23,8 +25,8 @@ public class Trade implements Serializable {
 		this.amount = string;
 	}
 
-	public void setTicker(Ticker ticker) {
-		this.ticker = ticker;
+	public void setProduct(Product ticker) {
+		this.product = ticker;
 	}
 
 	public String getTrader() {
@@ -39,14 +41,14 @@ public class Trade implements Serializable {
 		return amount;
 	}
 
-	public Ticker getTicker() {
-		return ticker;
+	public Product getProduct() {
+		return product;
 	}
 
 	@Override
 	public String toString() {
 		return "Trade [trader=" + trader + ", buySell=" + buySell + ", amount="
-				+ amount + ", ticker=" + ticker + "]";
+				+ amount + ", ticker=" + product + "]";
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class Trade implements Serializable {
 		int result = 1;
 		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
 		result = prime * result + ((buySell == null) ? 0 : buySell.hashCode());
-		result = prime * result + ((ticker == null) ? 0 : ticker.hashCode());
+		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		result = prime * result + ((trader == null) ? 0 : trader.hashCode());
 		return result;
 	}
@@ -79,10 +81,10 @@ public class Trade implements Serializable {
 				return false;
 		} else if (!buySell.equals(other.buySell))
 			return false;
-		if (ticker == null) {
-			if (other.ticker != null)
+		if (product == null) {
+			if (other.product != null)
 				return false;
-		} else if (!ticker.equals(other.ticker))
+		} else if (!product.equals(other.product))
 			return false;
 		if (trader == null) {
 			if (other.trader != null)

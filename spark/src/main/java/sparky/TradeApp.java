@@ -17,6 +17,8 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.PairFunction;
 
 import scala.Tuple2;
+import sparky.product.Product;
+import sparky.trade.Trade;
 import au.com.bytecode.opencsv.CSVParser;
 
 
@@ -34,30 +36,30 @@ public class TradeApp {
 		
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		
-		String csvFilePath = "G:\\git\\kata\\spark\\trades.txt";
+		String csvFilePath = "G:/git/code-examples/spark/trades.txt";
 		
 		JavaRDD<String> csvData = sc.textFile(csvFilePath);
 		
 		JavaRDD<Trade> tradeData = csvData.mapPartitions(convertCsvLinesToTrades);	// stage
 		
-		JavaPairRDD<Ticker, Trade> tradeDataByTicker = csvData
+		JavaPairRDD<Product, Trade> tradeDataByTicker = csvData
 				.mapToPair(convertCsvLineToTradePair)
 				.partitionBy(new HashPartitioner(100));	// stage
 
 		System.out.println("Number of CSV entries: " + tradeData.count());							// job
 		System.out.println("Number of distinct Ticker symbols: " + tradeDataByTicker.countByKey());	// job
 		
-		JavaPairRDD<Ticker, Integer> countOneForEachTrade = tradeData
+		JavaPairRDD<Product, Integer> countOneForEachTrade = tradeData
 				.mapToPair(
-						trade -> new Tuple2<Ticker, Integer>(trade.getTicker(), 1));	// stage
+						trade -> new Tuple2<Product, Integer>(trade.getProduct(), 1));	// stage
 		
 		// if we need a Map representation use countByKey()
-		Map<Ticker, Object> countByTickerAsMap = countOneForEachTrade.countByKey();
+		Map<Product, Object> countByTickerAsMap = countOneForEachTrade.countByKey();
 		
 		System.out.println("Distinct tickers are: " + countByTickerAsMap);
 		
 		// use reduceByKey() if need another RDD
-		JavaPairRDD<Ticker, Integer> countByTickersAsRdd = countOneForEachTrade
+		JavaPairRDD<Product, Integer> countByTickersAsRdd = countOneForEachTrade
 				.reduceByKey(
 						(a, b) -> a + b);
 		
@@ -105,7 +107,7 @@ public class TradeApp {
 		trade.setTrader(values[0]);
 		trade.setBuySell(values[1]);
 		trade.setAmount(values[2]);
-		trade.setTicker(new Ticker(values[3]));
+		trade.setProduct(new Product(values[3]));
 		return trade;
 	}
 	
@@ -113,16 +115,16 @@ public class TradeApp {
 	/**
 	 * Creates a CSVParser for every line
 	 */
-	private static PairFunction<String, Ticker, Trade> convertCsvLineToTradePair = line ->
+	private static PairFunction<String, Product, Trade> convertCsvLineToTradePair = line ->
 	{
 		final CSVParser parser = new CSVParser(',');
 		
 		String[] values = parser.parseLine(line);
 		
-		Ticker key = new Ticker(values[3]);
+		Product key = new Product(values[3]);
 		Trade value = createTradeFromArray(values);
 		
-		return new Tuple2<Ticker, Trade>(key, value);
+		return new Tuple2<Product, Trade>(key, value);
 	};
 
 }

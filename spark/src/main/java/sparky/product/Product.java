@@ -1,19 +1,17 @@
-package sparky;
+package sparky.product;
 
 import java.io.Serializable;
 
-public class Ticker implements Serializable {
+import com.google.common.base.Preconditions;
+
+public class Product implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String symbol;
+	public final String symbol;
 	
-	public Ticker(String symbol) {
-		this.symbol = symbol;
-	}
-
-	public String getSymbol() {
-		return symbol;
+	public Product(String symbol) {
+		this.symbol = Preconditions.checkNotNull(symbol, "symbol");
 	}
 
 	@Override
@@ -37,7 +35,7 @@ public class Ticker implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Ticker other = (Ticker) obj;
+		Product other = (Product) obj;
 		if (symbol == null) {
 			if (other.symbol != null)
 				return false;
