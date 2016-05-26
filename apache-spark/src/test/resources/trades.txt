@@ -1,0 +1,6 @@
+datetime,trader,buysell,quantity,product,price
+2015-05-29 12:00:00,alice,buy,100,appl,545
+2015-05-29 13:00:00,bob,sell,50,goog,545
+2015-05-29 14:00:00,charlie,buy,200,vod,545
+2015-05-29 15:00:00,derrick,buy,330,appl,545
+2015-05-29 16:00:00,eugene,sell,100,appl,545
