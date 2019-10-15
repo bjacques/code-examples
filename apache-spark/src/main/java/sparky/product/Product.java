@@ -9,6 +9,8 @@ public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public final String symbol;
+	// exchange
+	// currency
 	
 	public Product(String symbol) {
 		this.symbol = Preconditions.checkNotNull(symbol, "symbol");

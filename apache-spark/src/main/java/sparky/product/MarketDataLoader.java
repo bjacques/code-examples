@@ -3,6 +3,7 @@ package sparky.product;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.spark.Partitioner;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -78,7 +79,7 @@ public class MarketDataLoader {
 			
 		return new Tuple2<Product, MarketData>(marketData.product, marketData);
 	};
-	
+
 	
 	/**
 	 * Requires knowledge of the CSV file format (header line)
@@ -86,7 +87,7 @@ public class MarketDataLoader {
 	private static MarketData createMarketDataFromArray(String[] values)
 	{
 		MarketData md = new MarketData();
-		md.date = LocalDate.parse(values[0], SpringConfig.CSV_DATE_FORMAT);
+		md.date = LocalDate.parse(values[0]);
 		md.product = new Product(values[1]);
 		md.closePrice = Double.valueOf(values[2]);
 		md.volume = Long.valueOf(values[3]);

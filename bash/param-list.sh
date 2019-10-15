@@ -12,13 +12,13 @@ then
   exit 1
 fi
 
-abc=$1
-if ! [[ "A|B|C" == *"$abc|"* ]]
+value=$1
+if ! [[ "|A|B|C|" =~ "|${value}|" ]]
 then
   echo "Neither A or B or C was given"
   exit 1
 fi
 
-echo "You chose $abc"
+echo "You chose ${value}"
 
 exit $?

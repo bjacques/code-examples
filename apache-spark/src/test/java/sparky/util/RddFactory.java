@@ -25,6 +25,10 @@ public class RddFactory
 	{
 //		conf.set("spark.driver.allowMultipleContexts", "true")
 		sparkCtx = new JavaSparkContext("local", "RddFactory");
+		// turn off http server
+		// spark.broadcast.compress=false
+		// spark.shuffle.compress=false
+		// spark.shuffle.spill.compress=false
 	}
 	
 	

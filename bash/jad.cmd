@@ -1,0 +1,1 @@
+c:\\tools\jad.exe -p %1 > c:\\tools\out\%1.java

@@ -1,5 +1,7 @@
 package sparky.trade;
 
+import java.time.LocalDate;
+
 import org.apache.spark.Partitioner;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -27,7 +29,7 @@ public class TradeLoader {
 	}
 
 	
-	public JavaPairRDD<Product, Trade> loadTradesByProduct()
+	public JavaPairRDD<Product, Trade> loadByProduct(LocalDate runDate)
 	{
 		String csvFilePath = "G:\\git\\kata\\spark\\trades.txt";
 		

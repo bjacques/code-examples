@@ -1,10 +1,13 @@
 package sparky;
 
+import java.time.LocalDate;
+
 import org.apache.spark.api.java.JavaSparkContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import sparky.config.SpringConfig;
+import sparky.model.NaughtyTradeModel;
 
 public class Main {
 
@@ -13,8 +16,9 @@ public class Main {
 		ConfigurableApplicationContext springCtx = new AnnotationConfigApplicationContext(SpringConfig.class);
 		
 		try {
-			Model model = springCtx.getBean(Model.class);
-			model.execute();
+			NaughtyTradeModel model = springCtx.getBean(NaughtyTradeModel.class);
+			LocalDate runDate = LocalDate.parse(args[0]);
+			model.execute(runDate);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
