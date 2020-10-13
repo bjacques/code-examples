@@ -9,7 +9,7 @@
 		<spring.version>4.1.5.RELEASE</spring.version>
 		<!-- <spark.version>1.6.3</spark.version> -->
 		<spark.version>2.1.0</spark.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<opencsv.version>2.4</opencsv.version>
 	</properties>
 	<build>
